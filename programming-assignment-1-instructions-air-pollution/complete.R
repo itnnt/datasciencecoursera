@@ -45,6 +45,7 @@ complete <- function(directory, id=1:332) {
           d_NA_excluded <- d[complete.cases(d),]
           dataframe <- rbind(dataframe, (data.frame(table(d_NA_excluded$ID))))
      }
+     # rename data frame's columns' names
      colnames(dataframe) <- c('id', 'nobs')
      dataframe    
 }
