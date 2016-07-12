@@ -34,4 +34,17 @@ complete <- function(directory, id=1:332) {
      ## ...
      ## where 'id' is the monitor id number and 'nobs' is the 
      ## number of complete cases
+     ## 
+     dataframe <- NULL
+     for (i in id) {
+          filename <- paste0('00', i, '.csv')
+          filename <- paste0(directory, '/', substr(filename,nchar(filename)-6, nchar(filename)))
+          # print(filename)
+          d <- read.table(filename, sep = ',', quote = '"', na.strings = 'NA', header = TRUE)
+          
+          d_NA_excluded <- d[complete.cases(d),]
+          dataframe <- rbind(dataframe, (data.frame(table(d_NA_excluded$ID))))
+     }
+     colnames(dataframe) <- c('id', 'nobs')
+     dataframe    
 }
