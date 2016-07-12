@@ -7,23 +7,30 @@
 ## [1] 1.281
 
 pollutantmean <- function(directory, pollutant, id = 1:332) {
-  ## 'directory' is a character vector of length 1 indicating
-  ## the location of the csv files
-  
-  ## 'pollutant' is a character vector of length 1 indicating
-  ## the name of the pollutant for which we will calculate the
-  ## mean; either "sulfate" or "nitrate".
-  
-  ## 'id' is an integer vector indicating the monitor ID numbers
-  ## to be used
-  
-  ## Return the mean of the pollutant across all monitors list
-  ## in the 'id' vector (ignoring NA values)
-  ## NOTE: Do not round the result!
-  total_pollutant <- 0
-  count_pollutant <- 0
-  for (i in id) {
-    filename <- paste0('00', i, '.csv')
-    print(substr(filename,nchar(filename)-6, nchar(filename)))
-  }
+     ## 'directory' is a character vector of length 1 indicating
+     ## the location of the csv files
+     
+     ## 'pollutant' is a character vector of length 1 indicating
+     ## the name of the pollutant for which we will calculate the
+     ## mean; either "sulfate" or "nitrate".
+     
+     ## 'id' is an integer vector indicating the monitor ID numbers
+     ## to be used
+     
+     ## Return the mean of the pollutant across all monitors list
+     ## in the 'id' vector (ignoring NA values)
+     ## NOTE: Do not round the result!
+     total_pollutant <- 0
+     count_pollutant <- 0
+     for (i in id) {
+          filename <- paste0('00', i, '.csv')
+          filename <- paste0(directory, '/', substr(filename,nchar(filename)-6, nchar(filename)))
+          # print(filename)
+          d <- read.table(filename, sep = ',', quote = '"', na.strings = 'NA', header = TRUE)
+          
+          d_NA_excluded <- d[complete.cases(d[,pollutant]),]
+          total_pollutant <- total_pollutant + sum(d_NA_excluded[,pollutant])
+          count_pollutant <- count_pollutant + nrow(d_NA_excluded)
+     }
+     total_pollutant/count_pollutant
 }
